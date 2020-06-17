@@ -40,9 +40,21 @@ Theta_grad = zeros(size(Theta));
 %                     partial derivatives w.r.t. to each element of Theta
 %
 
-J = 0.5*sum(sum(((X*Theta').*R - Y).^2));
+% CALCULATING UNREGULARIZED COST AND GRADIENTS
+J = 0.5 * sum(sum(((((X*Theta').*R)-Y).^2)));
 X_grad = ((X*Theta').*R - Y) * Theta ;
 Theta_grad = ((X*Theta').*R - Y)'* X ;
+
+% REGULARIZED COST
+reg_cost = (lambda/2)*(sum(sum(X.^2)) + sum(sum(Theta.^2)));
+J = J + reg_cost;
+
+% REGULARIZED GRADIENTS
+reg_X = (lambda*X);
+X_grad = X_grad + reg_X;
+
+reg_Theta = (lambda*Theta);
+Theta_grad = Theta_grad + reg_Theta ;
 % =============================================================
 
 grad = [X_grad(:); Theta_grad(:)];
